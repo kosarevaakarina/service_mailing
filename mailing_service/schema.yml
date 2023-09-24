@@ -1,0 +1,1045 @@
+openapi: 3.0.3
+info:
+  title: Mailing Service
+  version: 0.0.0
+paths:
+  /api/schema/:
+    get:
+      operationId: api_schema_retrieve
+      description: |-
+        OpenApi3 schema for this API. Format can be selected via content negotiation.
+
+        - YAML: application/vnd.oai.openapi
+        - JSON: application/vnd.oai.openapi+json
+      parameters:
+      - in: query
+        name: format
+        schema:
+          type: string
+          enum:
+          - json
+          - yaml
+      - in: query
+        name: lang
+        schema:
+          type: string
+          enum:
+          - af
+          - ar
+          - ar-dz
+          - ast
+          - az
+          - be
+          - bg
+          - bn
+          - br
+          - bs
+          - ca
+          - ckb
+          - cs
+          - cy
+          - da
+          - de
+          - dsb
+          - el
+          - en
+          - en-au
+          - en-gb
+          - eo
+          - es
+          - es-ar
+          - es-co
+          - es-mx
+          - es-ni
+          - es-ve
+          - et
+          - eu
+          - fa
+          - fi
+          - fr
+          - fy
+          - ga
+          - gd
+          - gl
+          - he
+          - hi
+          - hr
+          - hsb
+          - hu
+          - hy
+          - ia
+          - id
+          - ig
+          - io
+          - is
+          - it
+          - ja
+          - ka
+          - kab
+          - kk
+          - km
+          - kn
+          - ko
+          - ky
+          - lb
+          - lt
+          - lv
+          - mk
+          - ml
+          - mn
+          - mr
+          - ms
+          - my
+          - nb
+          - ne
+          - nl
+          - nn
+          - os
+          - pa
+          - pl
+          - pt
+          - pt-br
+          - ro
+          - ru
+          - sk
+          - sl
+          - sq
+          - sr
+          - sr-latn
+          - sv
+          - sw
+          - ta
+          - te
+          - tg
+          - th
+          - tk
+          - tr
+          - tt
+          - udm
+          - uk
+          - ur
+          - uz
+          - vi
+          - zh-hans
+          - zh-hant
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/vnd.oai.openapi:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/yaml:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/vnd.oai.openapi+json:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+  /client/:
+    get:
+      operationId: client_list
+      description: Представление для модели клиента
+      tags:
+      - client
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Client'
+          description: ''
+    post:
+      operationId: client_create
+      description: Представление для модели клиента
+      tags:
+      - client
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Client'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Client'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Client'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Client'
+          description: ''
+  /client/{id}/:
+    get:
+      operationId: client_retrieve
+      description: Представление для модели клиента
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - client
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Client'
+          description: ''
+    put:
+      operationId: client_update
+      description: Представление для модели клиента
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - client
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Client'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Client'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Client'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Client'
+          description: ''
+    patch:
+      operationId: client_partial_update
+      description: Представление для модели клиента
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - client
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedClient'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedClient'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedClient'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Client'
+          description: ''
+    delete:
+      operationId: client_destroy
+      description: Представление для модели клиента
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - client
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /mailing/:
+    get:
+      operationId: mailing_list
+      description: Представление для просмотра рассылок
+      tags:
+      - mailing
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Mailing'
+          description: ''
+  /mailing/{id}/:
+    get:
+      operationId: mailing_retrieve
+      description: Представление для просмотра одной рассылки
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - mailing
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MailingRetrieve'
+          description: ''
+  /mailing/create/:
+    post:
+      operationId: mailing_create_create
+      description: Представление для создания рассылки
+      tags:
+      - mailing
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Mailing'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Mailing'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Mailing'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Mailing'
+          description: ''
+  /mailing/delete/{id}/:
+    delete:
+      operationId: mailing_delete_destroy
+      description: Представление для удаления рассылки
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - mailing
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /mailing/mailing_log/:
+    get:
+      operationId: mailing_mailing_log_list
+      description: Представление для просмотров статистики рассылок
+      tags:
+      - mailing
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MailingLog'
+          description: ''
+  /mailing/mailing_log/{id}/:
+    get:
+      operationId: mailing_mailing_log_retrieve
+      description: Представление для просмотра статистики одной рассылки
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - mailing
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MailingLogRetrieve'
+          description: ''
+  /mailing/update/{id}/:
+    put:
+      operationId: mailing_update_update
+      description: Представление для обновления рассылки
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - mailing
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Mailing'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Mailing'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Mailing'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Mailing'
+          description: ''
+    patch:
+      operationId: mailing_update_partial_update
+      description: Представление для обновления рассылки
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - mailing
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedMailing'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedMailing'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedMailing'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Mailing'
+          description: ''
+  /users/:
+    get:
+      operationId: users_list
+      description: Представления для просмотра списка пользователей
+      tags:
+      - users
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+          description: ''
+  /users/{id}/:
+    get:
+      operationId: users_retrieve
+      description: Представление для просмотра одного пользователя
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - users
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+  /users/delete/{id}/:
+    delete:
+      operationId: users_delete_destroy
+      description: Представление для удаления пользователя
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - users
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /users/register/:
+    post:
+      operationId: users_register_create
+      description: Представление для регистрации пользователя
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRegister'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserRegister'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserRegister'
+        required: true
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserRegister'
+          description: ''
+  /users/token/:
+    post:
+      operationId: users_token_create
+      description: |-
+        Takes a set of user credentials and returns an access and refresh JSON web
+        token pair to prove the authentication of those credentials.
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPair'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPair'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPair'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenObtainPair'
+          description: ''
+  /users/token/refresh/:
+    post:
+      operationId: users_token_refresh_create
+      description: |-
+        Takes a refresh type JSON web token and returns an access type JSON web
+        token if the refresh token is valid.
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenRefresh'
+          description: ''
+  /users/update/{id}/:
+    put:
+      operationId: users_update_update
+      description: Представление для обновления пользователя
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/User'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/User'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+    patch:
+      operationId: users_update_partial_update
+      description: Представление для обновления пользователя
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUser'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUser'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUser'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+components:
+  schemas:
+    BlankEnum:
+      enum:
+      - ''
+    Client:
+      type: object
+      description: Сериализатор для представления модели
+      properties:
+        phone:
+          type: string
+          title: Номер телефона
+          maxLength: 11
+        phone_code:
+          type: string
+          title: Код мобильного оператора
+          maxLength: 3
+        first_name:
+          type: string
+          title: Имя клиента
+          maxLength: 50
+        last_name:
+          type: string
+          title: Фамилия клиента
+          maxLength: 50
+        tag:
+          allOf:
+          - $ref: '#/components/schemas/TagEnum'
+          title: Тэг клиента
+      required:
+      - first_name
+      - last_name
+      - phone
+      - phone_code
+      - tag
+    FrequencyEnum:
+      enum:
+      - DAY
+      - WEEK
+      - MONTH
+      type: string
+      description: |-
+        * `DAY` - раз в день
+        * `WEEK` - раз в неделю
+        * `MONTH` - раз в месяц
+    Mailing:
+      type: object
+      description: Сериализатор для представления создания рассылки
+      properties:
+        frequency:
+          allOf:
+          - $ref: '#/components/schemas/FrequencyEnum'
+          title: Периодичность
+        status:
+          nullable: true
+          title: Статус
+          oneOf:
+          - $ref: '#/components/schemas/Status1cdEnum'
+          - $ref: '#/components/schemas/BlankEnum'
+          - $ref: '#/components/schemas/NullEnum'
+        tag:
+          allOf:
+          - $ref: '#/components/schemas/TagEnum'
+          title: Тэг клиента
+        message:
+          type: string
+          title: Сообщение
+        finish_at:
+          type: string
+          format: date-time
+          title: Дата и время завершения рассылки
+      required:
+      - finish_at
+      - frequency
+      - message
+      - tag
+    MailingLog:
+      type: object
+      description: Сериализатор для просмотра статистики рассылок
+      properties:
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusB24Enum'
+          title: Статус попытки
+        server_response:
+          type: string
+          nullable: true
+          title: Ответ почтового сервера
+        date_time:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Дата и время отправки
+      required:
+      - date_time
+      - status
+    MailingLogRetrieve:
+      type: object
+      description: Сериализатор для просмотра статистики одной рассылки
+      properties:
+        date_time:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Дата и время отправки
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusB24Enum'
+          title: Статус попытки
+        server_response:
+          type: string
+          nullable: true
+          title: Ответ почтового сервера
+        mailing:
+          allOf:
+          - $ref: '#/components/schemas/MailingRetrieve'
+          readOnly: true
+        client:
+          allOf:
+          - $ref: '#/components/schemas/Client'
+          readOnly: true
+      required:
+      - client
+      - date_time
+      - mailing
+      - status
+    MailingRetrieve:
+      type: object
+      description: Сериализатор для просмотра одной рассылки
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        create_at:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Дата и время запуска рассылки
+        frequency:
+          allOf:
+          - $ref: '#/components/schemas/FrequencyEnum'
+          title: Периодичность
+        status:
+          nullable: true
+          title: Статус
+          oneOf:
+          - $ref: '#/components/schemas/Status1cdEnum'
+          - $ref: '#/components/schemas/BlankEnum'
+          - $ref: '#/components/schemas/NullEnum'
+        tag:
+          allOf:
+          - $ref: '#/components/schemas/TagEnum'
+          title: Тэг клиента
+        message:
+          type: string
+          title: Сообщение
+        finish_at:
+          type: string
+          format: date-time
+          title: Дата и время завершения рассылки
+        is_active:
+          type: boolean
+          title: Признак активности
+        owner:
+          type: integer
+          nullable: true
+      required:
+      - create_at
+      - finish_at
+      - frequency
+      - id
+      - message
+      - tag
+    NullEnum:
+      enum:
+      - null
+    PatchedClient:
+      type: object
+      description: Сериализатор для представления модели
+      properties:
+        phone:
+          type: string
+          title: Номер телефона
+          maxLength: 11
+        phone_code:
+          type: string
+          title: Код мобильного оператора
+          maxLength: 3
+        first_name:
+          type: string
+          title: Имя клиента
+          maxLength: 50
+        last_name:
+          type: string
+          title: Фамилия клиента
+          maxLength: 50
+        tag:
+          allOf:
+          - $ref: '#/components/schemas/TagEnum'
+          title: Тэг клиента
+    PatchedMailing:
+      type: object
+      description: Сериализатор для представления создания рассылки
+      properties:
+        frequency:
+          allOf:
+          - $ref: '#/components/schemas/FrequencyEnum'
+          title: Периодичность
+        status:
+          nullable: true
+          title: Статус
+          oneOf:
+          - $ref: '#/components/schemas/Status1cdEnum'
+          - $ref: '#/components/schemas/BlankEnum'
+          - $ref: '#/components/schemas/NullEnum'
+        tag:
+          allOf:
+          - $ref: '#/components/schemas/TagEnum'
+          title: Тэг клиента
+        message:
+          type: string
+          title: Сообщение
+        finish_at:
+          type: string
+          format: date-time
+          title: Дата и время завершения рассылки
+    PatchedUser:
+      type: object
+      description: Сериализатор для пользователя
+      properties:
+        email:
+          type: string
+          format: email
+          title: Электронная почта
+          maxLength: 254
+        first_name:
+          type: string
+          nullable: true
+          title: Имя пользователя
+          maxLength: 50
+        last_name:
+          type: string
+          nullable: true
+          title: Фамилия пользователя
+          maxLength: 50
+        is_active:
+          type: boolean
+          title: Активность пользователя
+    Status1cdEnum:
+      enum:
+      - FINISH
+      - CREATE
+      - START
+      type: string
+      description: |-
+        * `FINISH` - завершена
+        * `CREATE` - создана
+        * `START` - запущена
+    StatusB24Enum:
+      enum:
+      - Success
+      - Failure
+      type: string
+      description: |-
+        * `Success` - успешно
+        * `Failure` - отказ
+    TagEnum:
+      enum:
+      - Potential client
+      - Active client
+      - Former client
+      type: string
+      description: |-
+        * `Potential client` - Potential client
+        * `Active client` - Active client
+        * `Former client` - Former client
+    TokenObtainPair:
+      type: object
+      properties:
+        email:
+          type: string
+          writeOnly: true
+        password:
+          type: string
+          writeOnly: true
+        access:
+          type: string
+          readOnly: true
+        refresh:
+          type: string
+          readOnly: true
+      required:
+      - access
+      - email
+      - password
+      - refresh
+    TokenRefresh:
+      type: object
+      properties:
+        access:
+          type: string
+          readOnly: true
+        refresh:
+          type: string
+          writeOnly: true
+      required:
+      - access
+      - refresh
+    User:
+      type: object
+      description: Сериализатор для пользователя
+      properties:
+        email:
+          type: string
+          format: email
+          title: Электронная почта
+          maxLength: 254
+        first_name:
+          type: string
+          nullable: true
+          title: Имя пользователя
+          maxLength: 50
+        last_name:
+          type: string
+          nullable: true
+          title: Фамилия пользователя
+          maxLength: 50
+        is_active:
+          type: boolean
+          title: Активность пользователя
+      required:
+      - email
+    UserRegister:
+      type: object
+      description: Сериализатор для регистрации пользователя
+      properties:
+        email:
+          type: string
+          format: email
+          title: Электронная почта
+          maxLength: 254
+        first_name:
+          type: string
+          nullable: true
+          title: Имя пользователя
+          maxLength: 50
+        last_name:
+          type: string
+          nullable: true
+          title: Фамилия пользователя
+          maxLength: 50
+        password:
+          type: string
+          title: Пароль
+          maxLength: 128
+        password2:
+          type: string
+      required:
+      - email
+      - password
+      - password2
+  securitySchemes:
+    jwtAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
