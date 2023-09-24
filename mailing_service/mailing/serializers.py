@@ -1,7 +1,12 @@
+import logging
+from django_celery_beat.models import PeriodicTask
 from rest_framework import serializers
 from clients.serializers import ClientSerializer
 from mailing.models import Mailing, MailingLog
 from mailing.services.periodic_task import MessageService, delete_task
+
+
+logger = logging.getLogger("base")
 
 
 class MailingSerializer(serializers.ModelSerializer):
@@ -20,19 +25,22 @@ class MailingSerializer(serializers.ModelSerializer):
         # изменение статуса рассылки
         mailing.status = 'START'
         mailing.save()
+        logger.info(f"Создана рассылка ID={mailing.pk}")
         return mailing
 
     def update(self, instance, validated_data):
         """При обновлении рассылки удаляется ранее созданная и создается новая периодическая задача"""
         super().update(instance, validated_data)
         # удаление ранее созданной рассылки
-        delete_task(instance)
+        if PeriodicTask.objects.filter(name=str(instance.pk)).exists():
+            delete_task(instance)
         # создание новой рассылки (периодической задачи)
         message_service = MessageService(instance)
         message_service.create_task()
         # изменение статуса рассылки
         instance.status = 'START'
         instance.save()
+        logger.info(f"Обновлена рассылка ID={instance.pk}")
         return instance
 
     def validate(self, attrs):

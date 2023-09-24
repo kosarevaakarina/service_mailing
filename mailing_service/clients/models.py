@@ -1,6 +1,10 @@
+import logging
 import pytz
 from django.conf import settings
 from django.db import models
+
+logger = logging.getLogger("base")
+
 
 NULLABLE = {'blank': True, 'null': True}
 
@@ -46,3 +50,4 @@ class Client(models.Model):
         """При удалении клиента меняет статус активности на False"""
         self.is_active = False
         self.save()
+        logger.info(f"Пользователь {self.user.email} удалил клиента {self.first_name} {self.last_name}")

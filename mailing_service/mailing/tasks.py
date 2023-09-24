@@ -1,5 +1,4 @@
 from celery import shared_task
-
 from clients.models import Client
 from mailing.models import Mailing
 from mailing.services.periodic_task import finish_task, delete_task

@@ -112,7 +112,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'users.User'
 
-
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',),
@@ -127,12 +126,10 @@ SPECTACULAR_SETTINGS = {
     'REDOC_DIST': 'SIDECAR',
 }
 
-
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1)
 }
-
 
 # Celery settings
 CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL', "redis://localhost:6379")
@@ -143,9 +140,7 @@ CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'Europe/Moscow'
 
-
 SEND_MESSAGE_TOKEN = os.getenv('SEND_MESSAGE_TOKEN')
-
 
 # Email settings
 EMAIL_HOST = 'smtp.yandex.ru'
@@ -154,3 +149,34 @@ EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS = False
 EMAIL_USE_SSL = True
+
+# Logging
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+
+    'formatters': {
+        "verbose": {
+            "format": "{asctime} - {levelname}` - {module} - {message}",
+            "style": "{",
+        }
+    },
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+            "formatter": "verbose",
+        },
+        "file": {
+            "class": "logging.FileHandler",
+            "formatter": "verbose",
+            "filename": "/Users/user/PycharmProjects/1/mailing_service/information.log"
+        }
+    },
+    "loggers": {
+        "base": {
+            "handlers": ["console", "file"],
+            "level": "INFO",
+            "propagate": True
+        },
+    }
+}

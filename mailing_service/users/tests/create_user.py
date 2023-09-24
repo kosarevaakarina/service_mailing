@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 
 from rest_framework.test import APITestCase
 
@@ -15,15 +15,17 @@ class UserCreate(APITestCase):
             phone_code='999',
             first_name='Test',
             last_name='Testov',
-            tag='Active client'
+            tag='Active client',
+            timezone='Europe/Moscow'
         )
 
         self.mailing = Mailing.objects.create(
+            create_at=datetime(year=2023, month=9, day=29, hour=9, minute=12, second=54).replace(tzinfo=timezone.utc),
             frequency='DAY',
             status='CREATE',
             tag='Active client',
             message='Test message',
-            finish_at=datetime(year=2024, month=1, day=1)
+            finish_at=datetime(year=2024, month=1, day=1).replace(tzinfo=timezone.utc)
         )
 
     def create_user(self):

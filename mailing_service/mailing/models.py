@@ -1,7 +1,10 @@
+import logging
 from django.db import models
 from config import settings
 from clients.models import ClientRoles, Client, NULLABLE
-from datetime import datetime
+from mailing.services.periodic_task import delete_task
+
+logger = logging.getLogger("base")
 
 
 class Mailing(models.Model):
@@ -43,6 +46,8 @@ class Mailing(models.Model):
         self.is_published = False
         self.status = 'FINISH'
         self.save()
+        delete_task(self)
+        logger.info(f'Удалена рассылка ID={self.pk}')
 
 
 class MailingLog(models.Model):

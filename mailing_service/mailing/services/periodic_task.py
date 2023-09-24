@@ -1,10 +1,14 @@
+import logging
 from datetime import datetime
 import pytz
 from django_celery_beat.models import CrontabSchedule, PeriodicTask
 
+logger = logging.getLogger("base")
+
 
 class MessageService:
     """Сервис создания рассылки"""
+
     def __init__(self, mailing):
         """Инициализация рассылки по экземпляру модели Mailing"""
         self.mailing = mailing
@@ -12,8 +16,9 @@ class MessageService:
     def create_task(self):
         """Создание периодической задачи"""
         crontab = self.crontab_create()
-        PeriodicTask.objects.create(crontab=crontab, name=str(self.mailing.pk), task='send_message',
-                                    args=[self.mailing.pk])
+        periodic_rask = PeriodicTask.objects.create(crontab=crontab, name=str(self.mailing.pk), task='send_message',
+                                                    args=[self.mailing.pk])
+        logger.info(f"Создана периодическая задача ID={periodic_rask.pk} для рассылки {self.mailing.pk}")
 
     def crontab_create(self):
         """Создание CRONTAB для выполнения периодической задачи"""
@@ -51,5 +56,9 @@ def delete_task(mailing):
     """Удаление периодической задачи"""
     task = PeriodicTask.objects.get(name=str(mailing.pk))
     task.delete()
+
+    logger.info(f"Периодическая задача ID={task.id} удалена")
+
     mailing.status = 'FINISH'
     mailing.delete()
+

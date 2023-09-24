@@ -5,7 +5,7 @@ from users.tests.create_user import UserCreate
 from rest_framework.test import APITestCase
 
 
-class UsersRegisterAPITestCase(APITestCase):
+class UserRegisterAPITestCase(APITestCase):
     """Тестирование регистрации пользователя"""
 
     def test_register_user(self):

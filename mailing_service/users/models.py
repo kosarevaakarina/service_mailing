@@ -1,6 +1,10 @@
+import logging
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from users.manager import UserManager
+
+logger = logging.getLogger("base")
+
 
 NULLABLE = {'blank': True, 'null': True}
 
@@ -31,3 +35,4 @@ class User(AbstractUser):
         """При удалении экземпляра модели User статус активности изменяется на False"""
         self.is_active = False
         self.save()
+        logger.info(f"Пользователь {self.email} удален")

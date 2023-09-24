@@ -1,7 +1,9 @@
+import logging
 from rest_framework import serializers
-
 from clients.validators import FirstNameValidator, LastNameValidator
 from users.models import User
+
+logger = logging.getLogger("base")
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -10,6 +12,11 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ('email', 'first_name', 'last_name', 'is_active')
         validators = [FirstNameValidator(field='first_name'), LastNameValidator(field='last_name')]
+
+    def update(self, instance, validated_data):
+        logger.info(f"Пользователь {instance.email} (ID={instance.pk}) обновил информацию")
+        super().update(instance, validated_data)
+        return instance
 
 
 class UserRegisterSerializer(serializers.ModelSerializer):
@@ -40,4 +47,5 @@ class UserRegisterSerializer(serializers.ModelSerializer):
         password = self.validated_data.get('password')
         user.set_password(password)
         user.save()
+        logger.info(f"Пользователь {self.validated_data['email']} зарегистрировался")
         return user

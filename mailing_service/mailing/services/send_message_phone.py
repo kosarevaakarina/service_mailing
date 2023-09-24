@@ -1,8 +1,10 @@
+import logging
 import requests
 from django.conf import settings
-
 from clients.models import Client
 from mailing.models import MailingLog, Mailing
+
+logger = logging.getLogger("base")
 
 
 class SendMessageService:
@@ -33,7 +35,15 @@ class SendMessageService:
         self.BASE_URL = f'https://probe.fbrq.cloud/v1/send/{id_message}'
         try:
             self.response = requests.post(self.BASE_URL, headers=self.headers, json=data_json)
+
+            logger.info(
+                f"Сообщение клиенту {self.client.first_name} {self.client.last_name} на номер {phone} отправлено")
+
         except Exception:
+
+            logger.error(
+                f"Сообщение клиенту {self.client.first_name} {self.client.last_name} на номер {phone} не отправлено")
+
             raise 'Сообщение на указанный номер телефона не доставлено!'
 
         if self.response.status_code == 200:
@@ -43,20 +53,19 @@ class SendMessageService:
 
     def create_mailing_log(self, status: str):
         """Создание информации о рассылке """
-        try:
-            MailingLog.objects.create(
+        self.mailing_log = MailingLog.objects.create(
                 status=status,
                 server_response=self.response.reason,
                 mailing=self.mailing,
                 client=self.client
             )
-        except Exception:
-            raise 'Сообщение на указанный номер телефона не доставлено!'
 
     def mailing_log_success(self) -> None:
         """Создание информации о рассылке со статусом Success"""
         self.create_mailing_log(status='Success')
+        logger.info(f"Информация о рассылке {self.mailing.id} создана ID={self.mailing_log.pk}")
 
     def mailing_log_fatal(self) -> None:
         """Создание информации о рассылке со статусом Failure"""
         self.create_mailing_log(status='Failure')
+        logger.error(f"Информация о рассылке {self.mailing.id} не создана")

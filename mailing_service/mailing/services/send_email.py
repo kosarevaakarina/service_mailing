@@ -1,7 +1,10 @@
+import logging
 from datetime import datetime
 from django.conf import settings
 from django.core.mail import send_mail
 from mailing.models import MailingLog
+
+logger = logging.getLogger("base")
 
 
 def get_mailing_log(owner) -> list:
@@ -67,5 +70,7 @@ def send_message_email():
                 from_email=settings.EMAIL_HOST_USER,
                 recipient_list=[owner.email]
             )
+            logger.info(f"Сообщение о рассылках за последние сутки пользователю {owner.email} отправлено")
         except Exception:
+            logger.error(f"Сообщение о рассылках за последние сутки пользователю {owner.email} не отправлено")
             raise 'Сообщение не отправлено'

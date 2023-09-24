@@ -13,7 +13,8 @@ class ClientCreateAPITestCase(UserCreate):
             'phone_code': '888',
             'first_name': 'First',
             'last_name': 'Last',
-            'tag': 'Active client'
+            'tag': 'Active client',
+            'timezone': 'Europe/Moscow'
         })
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
         self.assertEqual(response.json(), {'detail': 'Учетные данные не были предоставлены.'})
@@ -26,7 +27,8 @@ class ClientCreateAPITestCase(UserCreate):
             'phone_code': '888',
             'first_name': 'First',
             'last_name': 'Last',
-            'tag': 'Active client'
+            'tag': 'Active client',
+            'timezone': 'Europe/Moscow'
         })
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
@@ -38,7 +40,8 @@ class ClientCreateAPITestCase(UserCreate):
             'phone_code': '999',
             'first_name': 'First1',
             'last_name': 'Last1',
-            'tag': 'Active client'
+            'tag': 'Active client',
+            'timezone': 'Europe/Moscow'
         })
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.json(),
@@ -71,6 +74,7 @@ class ClientListAPITestCase(UserCreate):
             'first_name': 'Test',
             'last_name': 'Testov',
             'tag': 'Active client',
+            'timezone': 'Europe/Moscow',
             'is_active': True}])
 
 
@@ -97,6 +101,7 @@ class ClientRetrieveAPITestCase(UserCreate):
             'first_name': 'Test',
             'last_name': 'Testov',
             'tag': 'Active client',
+            'timezone': 'Europe/Moscow',
             'is_active': True})
 
 
@@ -123,6 +128,7 @@ class ClientUpdateAPITestCase(UserCreate):
             'first_name': 'NewName',
             'last_name': 'Testov',
             'tag': 'Active client',
+            'timezone': 'Europe/Moscow',
             'is_active': True})
 
 
