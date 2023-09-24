@@ -1,0 +1,12 @@
+stages:
+  - deploy
+
+Deploy to prod:
+  stage: deploy
+  script:
+    - cp $ENT_PROD .env
+    - docker-compose -f docker-compose.yml down
+    - docker-compose -f docker-compose.yml up -d --build
+    - docker exec app python manage.py test
+  tags:
+    - prod
