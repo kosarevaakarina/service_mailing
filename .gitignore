@@ -1,0 +1,4 @@
+/.idea
+/venv
+mailing_service/.env
+__pycache__
