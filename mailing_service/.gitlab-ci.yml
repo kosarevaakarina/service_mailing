@@ -7,6 +7,6 @@ Deploy to prod:
     - cp $ENT_PROD .env
     - docker-compose -f docker-compose.yml down
     - docker-compose -f docker-compose.yml up -d --build
-    - docker exec app python manage.py test
+    - docker-compose exec app python manage.py test
   tags:
     - prod
