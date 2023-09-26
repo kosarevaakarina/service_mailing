@@ -9,6 +9,6 @@ class ClientAdmin(admin.ModelAdmin):
     list_display = ('first_name', 'last_name', 'tag')
     fieldsets = (
         (None, {'fields': ('phone', )}),
-        ('Персональные данные', {'fields': ('first_name', 'last_name', 'tag', 'timezone')}),
+        ('Персональные данные', {'fields': ('first_name', 'last_name', 'tag', 'timezone', 'user')}),
         ('Код мобильного оператора', {'fields': ('phone_code', )}),
     )
