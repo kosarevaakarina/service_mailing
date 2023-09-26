@@ -13,3 +13,4 @@ coverage==7.3.1
 drf-yasg==1.21.7
 drf-spectacular==0.26.4
 drf-spectacular-sidecar==2023.9.1
+django-cors-headers==4.2.0
