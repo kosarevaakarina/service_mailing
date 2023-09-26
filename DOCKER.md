@@ -29,3 +29,8 @@ _или_
 docker-compose up -d --build
 ```
 _Второй вариант для запуска в фоновом режиме._
+_Для создания администратора запустить команду:_
+
+```
+docker-compose exec app python3 manage.py createsuperuser
+```
