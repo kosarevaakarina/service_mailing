@@ -7,19 +7,18 @@ from mailing.services.send_message_phone import SendMessageService
 
 
 @shared_task(name='send_message')
-def send_message(mailing_id):
+def send_message(mailing_id, client_id):
     """Периодическая задача: Отправка клиентов сообщений по номеру телефона"""
     mailing = Mailing.objects.get(pk=mailing_id)
-    clients = Client.objects.filter(tag=mailing.tag, is_active=True)
-    for client in clients:
-        if finish_task(mailing, client):
-            delete_task(mailing)
-        else:
-            sending = SendMessageService(mailing, client)
-            sending.send_message_phone()
+    client = Client.objects.get(pk=client_id)
+    if finish_task(mailing, client):
+        delete_task(mailing, client)
+    else:
+        sending = SendMessageService(mailing, client)
+        sending.send_message_phone()
 
 
-@shared_task(name='send message email')
+@shared_task(name='send_email')
 def send_message_by_email():
     """Периодическая задача: Ежедневная отправка сообщений пользователям о совершенных рассылках"""
     send_message_email()

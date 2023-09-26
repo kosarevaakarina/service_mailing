@@ -2,7 +2,7 @@ import logging
 import requests
 from django.conf import settings
 from clients.models import Client
-from mailing.models import MailingLog, Mailing
+from mailing.models import MailingLog, Mailing, Statistics
 
 logger = logging.getLogger("base")
 
@@ -20,6 +20,7 @@ class SendMessageService:
         """Инициализация сервиса экземплярами модели Mailing и Client"""
         self.mailing = mailing
         self.client = client
+        self.mailing_log = None
         self.response = None
 
     def send_message_phone(self) -> None:
@@ -48,6 +49,7 @@ class SendMessageService:
 
         if self.response.status_code == 200:
             self.mailing_log_success()
+            self.create_or_update_statistics()
         else:
             self.mailing_log_fatal()
 
@@ -69,3 +71,15 @@ class SendMessageService:
         """Создание информации о рассылке со статусом Failure"""
         self.create_mailing_log(status='Failure')
         logger.error(f"Информация о рассылке {self.mailing.id} не создана")
+
+    def create_or_update_statistics(self):
+        """Сбор общей статистики по рассылкам"""
+        if Statistics.objects.filter(tag=self.mailing.tag).exists():
+            statistics = Statistics.objects.get(tag=self.mailing.tag)
+            statistics.increment_count()
+        else:
+            statistics = Statistics.objects.create(tag=self.mailing.tag)
+            statistics.increment_count()
+
+            logger.info(f"Создание статистики ID={statistics.pk}")
+

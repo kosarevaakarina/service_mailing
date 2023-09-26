@@ -29,7 +29,7 @@ class User(AbstractUser):
 
     def __str__(self):
         """Строковое представление экземпляров модели User"""
-        return f'{self.first_name} {self.last_name} ({self.email})'
+        return self.email
 
     def delete(self, using=None, keep_parents=False):
         """При удалении экземпляра модели User статус активности изменяется на False"""

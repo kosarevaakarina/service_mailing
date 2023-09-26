@@ -9,18 +9,22 @@ logger = logging.getLogger("base")
 
 def get_mailing_log(owner) -> list:
     """Получает логи о рассылке, которые были сделаны за последние 24 часа"""
+
+    # получает всю информацию о рассылках для конкретного пользователя
     mailing_logs = MailingLog.objects.filter(mailing__owner=owner)
     mailing_log_list = []
     for mailing_log in mailing_logs:
         mailing_date = mailing_log.date_time.replace(tzinfo=None)
         date_now = datetime.now().replace(tzinfo=None)
         delta = (date_now - mailing_date).total_seconds()
+
+        # проверяет прошло ли 86400 секунд с момента создания информации о рассылки
         if int(delta) < 86400:
             mailing_log_list.append(mailing_log)
     return mailing_log_list
 
 
-def get_message(mailing_log_lst: list) -> str:
+def create_message(mailing_log_lst: list) -> str:
     """Формирует сообщение для рассылки"""
     message = 'Рассылки за сегодня:\n'
     count = 1
@@ -29,7 +33,9 @@ def get_message(mailing_log_lst: list) -> str:
         date_time = mailing_log.date_time.strftime("%H:%M.%S")
         status = mailing_log.status
         server_response = mailing_log.server_response
-        message += (f'{count}. {mailing}. Время рассылки: {date_time}. Статус отправки: {status}. '
+        client = mailing_log.client
+        # формирование сообщения для конкретного пользователя по созданным рассылкам
+        message += (f'{count}. {mailing}. Клиент: {client}. Время рассылки: {date_time}. Статус отправки: {status}. '
                     f'Ответ сервера: {server_response}.\n')
         count += 1
     return message
@@ -42,10 +48,14 @@ def get_owner() -> list:
     data_list = []
     for mailing_log in mailing_logs:
         owner_list.append(mailing_log.mailing.owner)
+
+        # получаем весь список пользователей, которые имеют информацию о рассылках
         owner_list = list(set(owner_list))
         for owner in owner_list:
             mailing_log_list = get_mailing_log(owner)
-            message = get_message(mailing_log_list)
+            message = create_message(mailing_log_list)
+
+            # получаем словарь с данными о сообщении и пользователе
             data = {
                 'message': message,
                 'owner': owner
@@ -54,15 +64,15 @@ def get_owner() -> list:
     return data_list
 
 
-def send_message_email():
+def send_message_email() -> None:
+    """Отправляет сообщение пользователю с информацией о рассылках за последние сутки"""
     current_date = datetime.now().date()
     current_date = current_date.strftime("%d.%m.%Y")
     subject = f'Информация о рассылках за {current_date}'
     data_list = get_owner()
     for data in data_list:
-        message = data.get('message')
-        owner = data.get('owner')
-
+        message = data['message']
+        owner = data['owner']
         try:
             send_mail(
                 subject=subject,

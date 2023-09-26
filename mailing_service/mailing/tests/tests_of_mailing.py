@@ -34,7 +34,7 @@ class MailingCreateAPITestCase(UserCreate):
         self.assertEqual(response.json(), {
             'create_at': '2023-10-12T09:10:12Z',
             'frequency': 'DAY',
-            'status': 'START',
+            'status': 'CREATE',
             'tag': 'Active client',
             'message': 'New test message',
             'finish_at': '2024-01-01T00:00:00Z'})
@@ -125,7 +125,7 @@ class MailingUpdateAPITestCase(UserCreate):
         self.assertEqual(response.json(), {
             'create_at': '2023-09-29T09:12:54Z',
             'frequency': 'WEEK',
-            'status': 'START',
+            'status': 'CREATE',
             'tag': 'Active client',
             'message': 'Test message',
             'finish_at': '2024-01-01T00:00:00Z'})

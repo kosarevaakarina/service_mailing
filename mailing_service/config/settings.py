@@ -16,6 +16,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
+CSRF_TRUSTED_ORIGINS = ['http://0.0.0.0', 'http://localhost']
+
 # Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -31,7 +33,6 @@ INSTALLED_APPS = [
     'drf_spectacular',
     'drf_spectacular_sidecar',
 
-    # local app
     'users',
     'clients',
     'mailing'
@@ -107,6 +108,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = 'static/'
 STATIC_ROOT = 'static/'
+
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
@@ -119,6 +121,7 @@ REST_FRAMEWORK = {
 
 }
 
+# drf-spectacular
 SPECTACULAR_SETTINGS = {
     'TITLE': 'Mailing Service',
     'SWAGGER_UI_DIST': 'SIDECAR',
@@ -131,7 +134,7 @@ SIMPLE_JWT = {
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1)
 }
 
-# Celery settings
+# Celery
 CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL', "redis://localhost:6379")
 CELERY_RESULT_BACKEND = os.getenv('CELERY_RESULT_BACKEND', "redis://localhost:6379")
 CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
@@ -139,6 +142,7 @@ CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'Europe/Moscow'
+
 
 SEND_MESSAGE_TOKEN = os.getenv('SEND_MESSAGE_TOKEN')
 
@@ -169,7 +173,7 @@ LOGGING = {
         "file": {
             "class": "logging.FileHandler",
             "formatter": "verbose",
-            "filename": "/Users/user/PycharmProjects/1/mailing_service/information.log"
+            "filename": "information.log"
         }
     },
     "loggers": {

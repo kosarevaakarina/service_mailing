@@ -5,6 +5,10 @@ python3 -m venv venv
 ```
 source venv/bin/activate
 ```
+_Перейти в рабочую директорию:_
+```
+cd mailing_service
+```
 _Установить зависимости:_
 ```
 pip install -r requirements.txt

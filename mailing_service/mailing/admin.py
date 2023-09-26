@@ -1,5 +1,5 @@
 from django.contrib import admin
-from mailing.models import Mailing, MailingLog
+from mailing.models import Mailing, MailingLog, Statistics
 
 
 @admin.register(Mailing)
@@ -16,3 +16,8 @@ class MailingAdmin(admin.ModelAdmin):
 @admin.register(MailingLog)
 class MailingLogAdmin(admin.ModelAdmin):
     list_display = ('date_time', 'status', 'server_response')
+
+
+@admin.register(Statistics)
+class StatisticsAdmin(admin.ModelAdmin):
+    list_display = ('create_at', 'tag', 'count')

@@ -2,7 +2,6 @@ import logging
 from django.db import models
 from config import settings
 from clients.models import ClientRoles, Client, NULLABLE
-from mailing.services.periodic_task import delete_task
 
 logger = logging.getLogger("base")
 
@@ -46,7 +45,6 @@ class Mailing(models.Model):
         self.is_published = False
         self.status = 'FINISH'
         self.save()
-        delete_task(self)
         logger.info(f'Удалена рассылка ID={self.pk}')
 
 
@@ -70,3 +68,21 @@ class MailingLog(models.Model):
 
     def __str__(self):
         return f'Информация о рассылке {self.mailing.pk}'
+
+
+class Statistics(models.Model):
+
+    create_at = models.DateTimeField(auto_now_add=True, verbose_name='дата и время создания статистики')
+    tag = models.CharField(max_length=50, choices=ClientRoles.TAGS, verbose_name='тэг рассылки')
+    count = models.PositiveIntegerField(default=0, verbose_name='количество рассылок')
+
+    class Meta:
+        verbose_name = 'статистика'
+        verbose_name_plural = 'статистики'
+
+    def increment_count(self):
+        self.count += 1
+        self.save()
+
+    def __str__(self):
+        return f'Статистика о рассылке {self.tag} (количество рассылок: {self.count})'
