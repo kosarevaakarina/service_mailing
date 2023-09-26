@@ -3,6 +3,7 @@ import requests
 from django.conf import settings
 from clients.models import Client
 from mailing.models import MailingLog, Mailing, Statistics
+from mailing.services.periodic_task import finish_task, delete_task, MessageService
 
 logger = logging.getLogger("base")
 
@@ -14,7 +15,7 @@ class SendMessageService:
     # заголовок для авторизации
     headers = {'Authorization': f'Bearer {TOKEN}'}
     # базовый url
-    BASE_URL = 'https://probe.fbrq.cloud/v1/send/'
+    BASE_URL = settings.BASE_URL_SEND_MESSAGE
 
     def __init__(self, mailing: Mailing, client: Client) -> None:
         """Инициализация сервиса экземплярами модели Mailing и Client"""
@@ -33,7 +34,7 @@ class SendMessageService:
             "phone": phone,
             "message": message
         }
-        self.BASE_URL = f'https://probe.fbrq.cloud/v1/send/{id_message}'
+        self.BASE_URL = f'{self.BASE_URL}{id_message}'
         try:
             self.response = requests.post(self.BASE_URL, headers=self.headers, json=data_json)
 
@@ -83,3 +84,16 @@ class SendMessageService:
 
             logger.info(f"Создание статистики ID={statistics.pk}")
 
+
+def send_message_to_phone(mailing_id, client_id):
+    """Отправка сообщения клиенту на номер телефона"""
+    mailing = Mailing.objects.get(pk=mailing_id)
+    client = Client.objects.get(pk=client_id)
+    message_service = MessageService(mailing, client)
+    if finish_task(mailing, client):
+        # если время рассылки закончилось, то она удаляется
+        delete_task(mailing, client)
+    elif message_service.check_create_at():
+        # если время запуска рассылки настало, то отправляем сообщения
+        sending = SendMessageService(mailing, client)
+        sending.send_message_phone()
