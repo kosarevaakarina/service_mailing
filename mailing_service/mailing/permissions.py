@@ -2,7 +2,7 @@ from rest_framework import permissions
 
 
 class IsOwner (permissions.BasePermission):
-    """Пользователь может просматривать, изменять и удалять только свой аккаунт"""
+    """Пользователь может изменять и удалять только свою рассылку"""
     def has_permission(self, request, view):
         if request.user.is_staff:
             return True

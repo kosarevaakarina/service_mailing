@@ -5,14 +5,14 @@ from mailing.serializers import MailingLogSerializer, MailingLogRetrieveSerializ
 
 
 class MailingLogListAPIView(ListAPIView):
-    """Представление для просмотров статистики рассылок"""
+    """Представление для просмотра информации о рассылках"""
     model = MailingLog
     serializer_class = MailingLogSerializer
     queryset = MailingLog.objects.all()
 
 
 class MailingLogRetrieveAPIView(RetrieveAPIView):
-    """Представление для просмотра статистики одной рассылки"""
+    """Представление для просмотра информации о каждой рассылки"""
     model = MailingLog
     serializer_class = MailingLogRetrieveSerializer
     queryset = MailingLog.objects.all()

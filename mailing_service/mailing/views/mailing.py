@@ -1,5 +1,4 @@
 from rest_framework import generics
-
 from mailing.models import Mailing
 from mailing.permissions import IsOwner
 from mailing.serializers import MailingSerializer, MailingRetrieveSerializer

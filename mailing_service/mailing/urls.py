@@ -3,6 +3,7 @@ from django.urls import path
 from mailing.views.mailing import (MailingCreateAPIView, MailingRetrieveAPIView, MailingUpdateAPIView,
                                    MailingDestroyAPIView, MailingListAPIView)
 from mailing.views.mailing_log import MailingLogListAPIView, MailingLogRetrieveAPIView
+from mailing.views.statistics import StatisticsListAPIView
 
 urlpatterns = [
     path('create/', MailingCreateAPIView.as_view(), name='mailing_create'),
@@ -12,4 +13,5 @@ urlpatterns = [
     path('delete/<int:pk>/', MailingDestroyAPIView.as_view(), name='mailing_update'),
     path('mailing_log/', MailingLogListAPIView.as_view(), name='mailing_log_list'),
     path('mailing_log/<int:pk>/', MailingLogRetrieveAPIView.as_view(), name='mailing_log_retrieve'),
+    path('statistics/', StatisticsListAPIView.as_view(), name='statistics')
 ]
