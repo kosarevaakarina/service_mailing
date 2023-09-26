@@ -1,7 +1,7 @@
 import logging
 from rest_framework import serializers
 from clients.models import Client
-from clients.validators import FirstNameValidator, LastNameValidator, PhoneValidator
+from clients.validators import FirstAndLastNameValidator, PhoneValidator
 from mailing.services.periodic_task import create_mailing_for_client, update_mailing_for_client
 
 logger = logging.getLogger("base")
@@ -14,8 +14,8 @@ class ClientSerializer(serializers.ModelSerializer):
         model = Client
         fields = ('phone', 'phone_code', 'first_name', 'last_name', 'tag', 'timezone', 'is_active')
         validators = [
-            FirstNameValidator(field='first_name'),
-            LastNameValidator(field='last_name'),
+            FirstAndLastNameValidator(field='first_name'),
+            FirstAndLastNameValidator(field='last_name'),
             PhoneValidator(field='phone')
         ]
 

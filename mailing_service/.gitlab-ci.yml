@@ -6,6 +6,7 @@ Deploy to prod:
   script:
     - cp $ENT_PROD .env
     - docker-compose -f docker-compose.yml down
+    - docker image prune -a -f
     - docker-compose -f docker-compose.yml up -d --build
     - docker-compose exec app python manage.py test
   tags:

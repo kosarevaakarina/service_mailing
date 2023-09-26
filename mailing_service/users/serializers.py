@@ -1,6 +1,6 @@
 import logging
 from rest_framework import serializers
-from clients.validators import FirstNameValidator, LastNameValidator
+from clients.validators import FirstAndLastNameValidator
 from users.models import User
 
 logger = logging.getLogger("base")
@@ -11,7 +11,7 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('email', 'first_name', 'last_name', 'is_active')
-        validators = [FirstNameValidator(field='first_name'), LastNameValidator(field='last_name')]
+        validators = [FirstAndLastNameValidator(field='first_name'), FirstAndLastNameValidator(field='last_name')]
 
     def update(self, instance, validated_data):
         logger.info(f"Пользователь {instance.email} (ID={instance.pk}) обновил информацию")
@@ -26,7 +26,7 @@ class UserRegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('email', 'first_name', 'last_name', 'password', 'password2')
-        validators = [FirstNameValidator(field='first_name'), LastNameValidator(field='last_name')]
+        validators = [FirstAndLastNameValidator(field='first_name'), FirstAndLastNameValidator(field='last_name')]
 
     def validate(self, attrs):
         """Валидация паролей"""

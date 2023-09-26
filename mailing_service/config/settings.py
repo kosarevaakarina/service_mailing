@@ -147,6 +147,7 @@ CELERY_TIMEZONE = 'Europe/Moscow'
 
 
 SEND_MESSAGE_TOKEN = os.getenv('SEND_MESSAGE_TOKEN')
+BASE_URL_SEND_MESSAGE = 'https://probe.fbrq.cloud/v1/send/'
 
 # Email settings
 EMAIL_HOST = 'smtp.yandex.ru'
@@ -188,5 +189,5 @@ LOGGING = {
 }
 
 # CORS
-CORS_ALLOWED_ORIGINS = ['*']
-CORS_TRUSTED_ORIGINS = ['*']
+CORS_ALLOWED_ORIGINS = ['http://0.0.0.0', 'http://localhost']
+CORS_TRUSTED_ORIGINS = ['http://0.0.0.0', 'http://localhost']
